@@ -58,12 +58,8 @@ struct Scanner {
     // The delimiter may not contain ')' so a single counter suffices.
     int delimiter_index = -1;
     for (;;) {
-      // If we hit EOF, consider the content to terminate there.
-      // This forms an incomplete raw_string_literal, and models the code well.
-      if (lexer->lookahead == 0) {
-        lexer->mark_end(lexer);
-        return true;
-      }
+      if (lexer->lookahead == 0)
+        return false; // EOF
 
       if (delimiter_index >= 0) {
         if (static_cast<unsigned>(delimiter_index) == delimiter.size()) {
